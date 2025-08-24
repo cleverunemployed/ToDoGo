@@ -1,11 +1,26 @@
 package models
 
-type Task struct {
-	ID       string `json:"id"`
-	Title    string `json:"title"`
-	Comleted bool   `json:"comleted"`
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
+type Tasks struct {
+	gorm.Model
+	ID          uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Title       string
+	Description string
+	Completed   bool
+	DateStart   time.Time
+	DateEnd     time.Time
 }
 
-type SchemaTask struct {
-	Title string `json:"title"`
+type Users struct {
+	gorm.Model
+	ID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
+	Email    string    `gorm:"unique"`
+	Password string
+	Tasks    []Tasks `gorm:"many2many:user_task;"`
 }
