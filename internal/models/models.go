@@ -22,5 +22,10 @@ type Users struct {
 	ID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
 	Email    string    `gorm:"unique"`
 	Password string
-	Tasks    []Tasks `gorm:"many2many:user_task;"`
+}
+
+type UserTask struct {
+	gorm.Model
+	IDUser uuid.UUID
+	IDTask uuid.UUID
 }
