@@ -1,0 +1,435 @@
+basePath: /api/v1
+definitions:
+  schemas.CreateTaskRequest:
+    description: Запрос на создание новой задачи
+    properties:
+      completed:
+        description: Статус выполнения задачи
+        example: false
+        type: boolean
+      date_end:
+        description: Дата окончания выполнения
+        example: "2024-01-20T18:00:00Z"
+        type: string
+      date_start:
+        description: Дата начала выполнения
+        example: "2024-01-15T10:00:00Z"
+        type: string
+      description:
+        description: Описание задачи
+        example: Необходимо завершить все задачи проекта
+        type: string
+      title:
+        description: Название задачи
+        example: Завершить проект
+        type: string
+    type: object
+  schemas.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  schemas.DeleteTaskRequest:
+    description: Запрос на удаление задачи по идентификатору
+    properties:
+      id:
+        description: UUID идентификатор задачи для удаления
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+    type: object
+  schemas.DeleteUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  schemas.ReadTaskRequest:
+    description: Запрос на получение задачи по идентификатору пользователя
+    properties:
+      id_user:
+        description: UUID идентификатор пользователя
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+    type: object
+  schemas.UpdateEmailRequest:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+    required:
+    - email
+    - id
+    type: object
+  schemas.UpdatePasswordRequest:
+    properties:
+      id:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - id
+    - password
+    type: object
+  schemas.UpdateTaskRequest:
+    description: Запрос на обновление существующей задачи
+    properties:
+      completed:
+        description: Новый статус выполнения
+        example: true
+        type: boolean
+      date_end:
+        description: Новая дата окончания
+        example: "2024-01-25T18:00:00Z"
+        type: string
+      date_start:
+        description: Новая дата начала
+        example: "2024-01-16T10:00:00Z"
+        type: string
+      description:
+        description: Новое описание задачи
+        example: Обновленное описание задачи
+        type: string
+      id:
+        description: UUID идентификатор задачи
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      title:
+        description: Новое название задачи
+        example: Обновленное название задачи
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for a awesome API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Awesome API
+  version: "1.0"
+paths:
+  /api/v1/change/email:
+    patch:
+      consumes:
+      - application/json
+      description: Изменяет email пользователя
+      parameters:
+      - description: Данные для обновления email
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdateEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Обновление email
+      tags:
+      - Users
+  /api/v1/change/password:
+    patch:
+      consumes:
+      - application/json
+      description: Изменяет пароль пользователя
+      parameters:
+      - description: Данные для обновления пароля
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Обновление пароля
+      tags:
+      - Users
+  /api/v1/create/task:
+    post:
+      consumes:
+      - application/json
+      description: Создает новую задачу для пользователя
+      parameters:
+      - description: Данные задачи
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Создание задачи
+      tags:
+      - Tasks
+  /api/v1/delete/task:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет задачу по ID
+      parameters:
+      - description: ID задачи для удаления
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.DeleteTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Удаление задачи
+      tags:
+      - Tasks
+  /api/v1/delete/user:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет учетную запись пользователя
+      parameters:
+      - description: Учетные данные для удаления
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.DeleteUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Удаление пользователя
+      tags:
+      - Users
+  /api/v1/get/all/tasks:
+    post:
+      consumes:
+      - application/json
+      description: Возвращает список всех задач для указанного пользователя
+      parameters:
+      - description: ID пользователя
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ReadTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Получение всех задач
+      tags:
+      - Tasks
+  /api/v1/signin:
+    post:
+      consumes:
+      - application/json
+      description: Проверяет учетные данные и возвращает токены доступа
+      parameters:
+      - description: Учетные данные
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Аутентификация пользователя
+      tags:
+      - Users
+  /api/v1/signup:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя и возвращает токены доступа
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Регистрация пользователя
+      tags:
+      - Users
+  /api/v1/update/task:
+    patch:
+      consumes:
+      - application/json
+      description: Обновляет данные существующей задачи
+      parameters:
+      - description: Обновленные данные задачи
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Обновление задачи
+      tags:
+      - Tasks
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

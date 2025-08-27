@@ -14,6 +14,17 @@ import (
 	"github.com/google/uuid"
 )
 
+// CreateUser регистрирует нового пользователя
+// @Summary Регистрация пользователя
+// @Description Создает нового пользователя и возвращает токены доступа
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body schemas.CreateUserRequest true "Данные пользователя"
+// @Success 201 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/signup [post]
 func CreateUser(c *gin.Context) {
 	var jsonData = schemas.CreateUserRequest{}
 	c.BindJSON(&jsonData)
@@ -64,6 +75,18 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
+// ReadUser аутентифицирует пользователя
+// @Summary Аутентификация пользователя
+// @Description Проверяет учетные данные и возвращает токены доступа
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param credentials body schemas.CreateUserRequest true "Учетные данные"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 401 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/signin [post]
 func ReadUser(c *gin.Context) {
 	var jsonData = schemas.CreateUserRequest{}
 	c.BindJSON(&jsonData)
@@ -115,6 +138,17 @@ func ReadUser(c *gin.Context) {
 	})
 }
 
+// UpdatePassword обновляет пароль пользователя
+// @Summary Обновление пароля
+// @Description Изменяет пароль пользователя
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param request body schemas.UpdatePasswordRequest true "Данные для обновления пароля"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/change/password [patch]
 func UpdatePassword(c *gin.Context) {
 	var jsonData = schemas.UpdatePasswordRequest{}
 	var userUpdateData models.Users
@@ -151,6 +185,17 @@ func UpdatePassword(c *gin.Context) {
 	})
 }
 
+// UpdateEmail обновляет email пользователя
+// @Summary Обновление email
+// @Description Изменяет email пользователя
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param request body schemas.UpdateEmailRequest true "Данные для обновления email"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/change/email [patch]
 func UpdateEmail(c *gin.Context) {
 	var jsonData = schemas.UpdateEmailRequest{}
 	var userUpdateData models.Users
@@ -187,6 +232,17 @@ func UpdateEmail(c *gin.Context) {
 	})
 }
 
+// DeleteUser удаляет пользователя
+// @Summary Удаление пользователя
+// @Description Удаляет учетную запись пользователя
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param request body schemas.DeleteUserRequest true "Учетные данные для удаления"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/delete/user [delete]
 func DeleteUser(c *gin.Context) {
 	var jsonData = schemas.DeleteUserRequest{}
 	var userUpdateData models.Users

@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateTask создает новую задачу
+// @Summary Создание задачи
+// @Description Создает новую задачу для пользователя
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param task body schemas.CreateTaskRequest true "Данные задачи"
+// @Success 201 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/create/task [post]
 func CreateTask(c *gin.Context) {
 	var jsonData = schemas.CreateTaskRequest{}
 	var taskData models.Tasks
@@ -44,6 +55,17 @@ func CreateTask(c *gin.Context) {
 	})
 }
 
+// ReadAllTasks получает все задачи пользователя
+// @Summary Получение всех задач
+// @Description Возвращает список всех задач для указанного пользователя
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param request body schemas.ReadTaskRequest true "ID пользователя"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/get/all/tasks [post]
 func ReadAllTasks(c *gin.Context) {
 	var jsonData = schemas.ReadTaskRequest{}
 	c.BindJSON(&jsonData)
@@ -68,6 +90,17 @@ func ReadAllTasks(c *gin.Context) {
 	})
 }
 
+// UpdateTask обновляет существующую задачу
+// @Summary Обновление задачи
+// @Description Обновляет данные существующей задачи
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param task body schemas.UpdateTaskRequest true "Обновленные данные задачи"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/update/task [patch]
 func UpdateTask(c *gin.Context) {
 	var jsonData = schemas.UpdateTaskRequest{}
 	var taskData models.Tasks
@@ -101,6 +134,17 @@ func UpdateTask(c *gin.Context) {
 	})
 }
 
+// DeleteTask удаляет задачу
+// @Summary Удаление задачи
+// @Description Удаляет задачу по ID
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param request body schemas.DeleteTaskRequest true "ID задачи для удаления"
+// @Success 200 {object} map[any]any
+// @Failure 400 {object} map[any]any
+// @Failure 500 {object} map[any]any
+// @Router /api/v1/delete/task [delete]
 func DeleteTask(c *gin.Context) {
 	var jsonData = schemas.DeleteTaskRequest{}
 
