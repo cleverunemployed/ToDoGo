@@ -5,9 +5,12 @@ import (
 	"github/cleverunemployed/ToDoGo/internal/db"
 	"github/cleverunemployed/ToDoGo/internal/models"
 	"github/cleverunemployed/ToDoGo/internal/schemas"
+	"github/cleverunemployed/ToDoGo/internal/tools"
 	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -29,9 +32,35 @@ func CreateUser(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
+
+	token, err := tools.NewAccessToken(tools.UserClaims{
+		ID:    id.String(),
+		Email: jsonData.Email,
+	})
+	if err != nil {
+		log.Fatalln("Jwt isn't created!")
+	}
+
+	refreshToken, err := tools.NewRefreshToken(jwt.RegisteredClaims{
+		Subject:   id.String(), // Usually the user ID
+		IssuedAt:  jwt.NewNumericDate(time.Now()),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour * 7)), // 7 days for refresh token
+		Issuer:    "todoapp",                                              // Your application name
+		// Add other standard JWT claims as needed
+		// Audience:  []string{"your-audience"},
+		// ID:        "unique-token-id",
+	})
+	if err != nil {
+		log.Fatalln("Refresh Jwt isn't created!")
+	}
+
 	c.JSON(201, gin.H{
-		"msg":     "User created",
-		"id_user": id,
+		"msg": "User created",
+		"data": map[any]any{
+			"token":         token,
+			"refresh_token": refreshToken,
+			"id_user":       id,
+		},
 	})
 }
 
@@ -49,13 +78,40 @@ func ReadUser(c *gin.Context) {
 		log.Println(err)
 	}
 
-	id, err := db.ReadUser(jsonData)
+	user, err := db.ReadUser(jsonData)
 	if err != nil {
 		log.Println(err)
 	}
+	user.Password = "[secret]"
+
+	token, err := tools.NewAccessToken(tools.UserClaims{
+		ID:    user.ID.String(),
+		Email: jsonData.Email,
+	})
+	if err != nil {
+		log.Fatalln("Jwt isn't created!")
+	}
+
+	refreshToken, err := tools.NewRefreshToken(jwt.RegisteredClaims{
+		Subject:   user.ID.String(), // Usually the user ID
+		IssuedAt:  jwt.NewNumericDate(time.Now()),
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour * 7)), // 7 days for refresh token
+		Issuer:    "todoapp",                                              // Your application name
+		// Add other standard JWT claims as needed
+		// Audience:  []string{"your-audience"},
+		// ID:        "unique-token-id",
+	})
+	if err != nil {
+		log.Fatalln("Refresh Jwt isn't created!")
+	}
+
 	c.JSON(200, gin.H{
-		"msg":     "User is entered",
-		"id_user": id,
+		"msg": "User is entered",
+		"data": map[any]any{
+			"token":         token,
+			"refresh_token": refreshToken,
+			"user_data":     user,
+		},
 	})
 }
 

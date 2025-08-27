@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Port string
-	Url  string
+	Port   string
+	Url    string
+	Secret string
 }
 
 func Init() (*Config, error) {
@@ -21,6 +22,7 @@ func Init() (*Config, error) {
 
 	config.Port = os.Getenv("PORT")
 	config.Url = os.Getenv("DATABASE_URL")
+	config.Secret = os.Getenv("SECRET_JWT")
 
 	return &config, nil
 }
